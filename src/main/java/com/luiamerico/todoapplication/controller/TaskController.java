@@ -5,6 +5,7 @@ import com.luiamerico.todoapplication.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/{id}")
-    public String getTaskById() {
-        return "Task by ID";
+    public Task getTaskById(@PathVariable Long id) {
+        return taskService.getTaskById(id);
     }
 
     @PostMapping("/tasks")
@@ -35,13 +36,14 @@ public class TaskController {
     }
 
     @PutMapping("/tasks/{id}")
-    public String updateTask() {
-        return "Update a task";
+    public ResponseEntity<String> updateTask(@PathVariable Long id, @RequestBody Task task) {
+        taskService.updateTask(id, task);
+        return ResponseEntity.status(HttpStatus.OK).body("Task updated successfully");
     }
 
     @DeleteMapping("/tasks/{id}")
     public ResponseEntity<String> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Task deleted successfully");
+        return ResponseEntity.noContent().build();
     }
 }
