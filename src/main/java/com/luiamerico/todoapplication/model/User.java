@@ -11,23 +11,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tasks")
-public class Task {
-
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, unique = true)
+    private String username;
+    @Column(nullable = false, unique = true)
+    private String email;
     @Column(nullable = false)
-    private String title;
-    @Column
-    private String description;
-    private boolean completed;
-    @Column(name = "created_at")
-    private String createdAt;
-    @Column(name = "due_date")
-    private String dueDate;
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private String password;
+
 
 }
