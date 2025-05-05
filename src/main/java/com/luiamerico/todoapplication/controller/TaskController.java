@@ -21,6 +21,7 @@ public class TaskController {
 
     @GetMapping("/tasks")
     public List<Task> getTasks() {
+        System.out.println("Buscando tarefas para o usuário...");
         return taskService.getAllTasks();
     }
 

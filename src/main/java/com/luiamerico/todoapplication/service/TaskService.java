@@ -24,13 +24,28 @@ public class TaskService {
     }
 
     public List<Task> getAllTasks() {
-        String userEmail = securityUtil.getCurrentUserEmail();
-        return taskRepository.findByUserEmail(userEmail);
+        String email = securityUtil.getCurrentUserEmail();
+
+        System.out.println("Tentando buscar tarefas para o email: " + email);
+
+        if (email == null) {
+            throw new RuntimeException("Nenhum usuário autenticado");
+        }
+
+        return taskRepository.findByUserEmail(email);
     }
 
     public Task getTaskById(Long id) {
-        return taskRepository.findById(id)
+        Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
+
+        String currentUserEmail = securityUtil.getCurrentUserEmail();
+
+        if (!task.getUser().getEmail().equals(currentUserEmail)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para ver essa tarefa");
+        }
+
+        return task;
     }
 
     public Task updateTask(Long id, Task taskDetails) {

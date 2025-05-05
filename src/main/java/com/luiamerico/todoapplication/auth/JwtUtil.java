@@ -1,17 +1,14 @@
 package com.luiamerico.todoapplication.auth;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -43,6 +40,7 @@ public class JwtUtil {
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
+                .claim("roles", Arrays.asList("USER"))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(expiration)))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
@@ -77,5 +75,13 @@ public class JwtUtil {
             logger.warning("Token is null or empty: " + e.getMessage());
         }
         return false;
+    }
+
+    public Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     public UserController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
-        this.jwtUtil = jwtUtil;;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")

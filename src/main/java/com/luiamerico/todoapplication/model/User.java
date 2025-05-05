@@ -1,10 +1,13 @@
 package com.luiamerico.todoapplication.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,6 +25,10 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
+
+    @JsonIgnoreProperties("tasks")
+    @OneToMany(mappedBy = "user")
+    private List<Task> tasks;
 
 
 }

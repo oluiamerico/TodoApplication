@@ -1,5 +1,6 @@
 package com.luiamerico.todoapplication.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,8 @@ public class Task {
     private String createdAt;
     @Column(name = "due_date")
     private String dueDate;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
